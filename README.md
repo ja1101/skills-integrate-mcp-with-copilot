@@ -33,5 +33,33 @@
 
 ---
 
+## Run Locally
+
+1. Create and activate a virtual environment.
+
+  ```powershell
+  python -m venv .venv
+  .\.venv\Scripts\Activate.ps1
+  ```
+
+2. Install dependencies.
+
+  ```powershell
+  pip install -r requirements.txt
+  ```
+
+3. Start the app.
+
+  ```powershell
+  python -m uvicorn src.app:app --host 0.0.0.0 --port 8000 --reload
+  ```
+
+Optional: run it from VS Code using Terminal > Run Task > run-app.
+
+4. Open:
+
+  - http://localhost:8000/static/index.html
+  - http://localhost:8000/docs
+
 &copy; 2025 GitHub &bull; [Code of Conduct](https://www.contributor-covenant.org/version/2/1/code_of_conduct/code_of_conduct.md) &bull; [MIT License](https://gh.io/mit)
 
