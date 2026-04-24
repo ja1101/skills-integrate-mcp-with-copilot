@@ -4,7 +4,7 @@ High School Management System API
 A super simple FastAPI application that allows students to view and sign up
 for extracurricular activities at Mergington High School.
 """
-
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
@@ -12,8 +12,16 @@ import json
 from pathlib import Path
 from threading import Lock
 
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    ensure_activities_file()
+    yield
+    pass  # No cleanup needed on shutdown
+
 app = FastAPI(title="Mergington High School API",
-              description="API for viewing and signing up for extracurricular activities")
+              description="API for viewing and signing up for extracurricular activities",
+              lifespan=lifespan)
 
 # Mount the static files directory
 current_dir = Path(__file__).parent
@@ -111,11 +119,6 @@ def save_activities(activities: dict) -> None:
     """Persist all activities to the JSON data file."""
     with activities_file_path.open("w", encoding="utf-8") as data_file:
         json.dump(activities, data_file, indent=2)
-
-
-@app.on_event("startup")
-def initialize_data_file() -> None:
-    ensure_activities_file()
 
 
 @app.get("/")
